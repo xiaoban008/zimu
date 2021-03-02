@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: zimu
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: defaultDataSource
+    password: Jinhua520
+    url: jdbc:mysql://localhost:3306/zimu?serverTimezone=UTC
+    username: xiaoban
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update

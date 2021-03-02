@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.7/layui.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <style>
+        #upload-div{
+            text-align: center;
+            padding-top: 20%;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-container">
+
+    <div class="layui-col-lg12" id="upload-div">
+        <div class="layui-upload-drag" id="test10">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将音频拖拽到此处</p>
+            <div class="layui-hide" id="uploadDemoView">
+                <hr>
+                <img src="" alt="上传成功后渲染" style="max-width: 196px">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,accept: 'file' //普通文件 audio是音频
+            // ,size: 60 //限制文件大小，单位 KB
+            ,url: 'https://httpbin.org/post' //改成您自己的上传接口
+            ,done: function(res){
+                layer.msg('上传成功');
+                //回显
+                // layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
+                console.log(res)
+            }
+        });
+    });
+</script>
+</body>
+</html>
