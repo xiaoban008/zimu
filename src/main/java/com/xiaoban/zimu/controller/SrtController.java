@@ -1,6 +1,6 @@
 package com.xiaoban.zimu.controller;
 
-import com.xiaoban.zimu.SrtService;
+import com.xiaoban.zimu.service.SrtService;
 import com.xiaoban.zimu.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

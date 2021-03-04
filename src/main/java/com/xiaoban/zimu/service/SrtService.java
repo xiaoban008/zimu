@@ -1,4 +1,4 @@
-package com.xiaoban.zimu;
+package com.xiaoban.zimu.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

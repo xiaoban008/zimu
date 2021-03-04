@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.iflytek.msp.lfasr.LfasrClient;
 import com.iflytek.msp.lfasr.model.Message;
-import com.xiaoban.zimu.SrtService;
 import com.xiaoban.zimu.model.MsgResult;
 import com.xiaoban.zimu.model.SrtConfig;
 import com.xiaoban.zimu.model.SrtEntity;
+import com.xiaoban.zimu.service.CosService;
+import com.xiaoban.zimu.service.SrtService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,6 +31,9 @@ public class SrtServiceImpl implements SrtService {
 
     @Value("${xiaoban.tmp}")
     private String tmp;
+
+    @Autowired
+    private CosService cosService;
 
     public String getTmp() {
         return tmp;
@@ -122,9 +128,15 @@ public class SrtServiceImpl implements SrtService {
         dest.mkdirs();
         try {
             file.transferTo(dest);
+
             log.info("上传成功");
-            standard(dest.getAbsolutePath());
-        } catch (IOException | InterruptedException e) {
+//            standard(dest.getAbsolutePath());
+            Boolean upload ;
+            String name = UUID.randomUUID().toString().substring(0,2) +"-" +  fileName;
+            file.transferTo(dest);
+            upload = cosService.upload(dest);
+            log.info("uoload is {}",upload);
+        } catch (IOException e) {
             log.error(e.toString(), e);
         }
     }

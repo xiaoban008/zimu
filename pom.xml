@@ -31,6 +31,19 @@
             <version>1.2.67</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.6.35</version>
+        </dependency>
+        <!--添加log4j相关jar包-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+
+
         <!--语音转写 SDK-->
         <dependency>
             <groupId>com.iflytek.msp.lfasr</groupId>
