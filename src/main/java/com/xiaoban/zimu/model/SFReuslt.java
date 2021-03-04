@@ -27,4 +27,7 @@ public class SFReuslt implements Serializable {
     private Object msg;
 
 
+    public boolean ok() {
+        return this.response == 200;
+    }
 }

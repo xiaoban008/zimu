@@ -30,14 +30,18 @@ public class XuFeiUtils {
     private static  final String VPS_URL = "https://api.sanfengyun.com/www/vps.php";
     private static final int SUCCESS_CODE = 200;
 
+    private static final String CMD_LOGIN =	"login";
+    private static final String CMD_VPS_LIST =	"login";
+    private static final String ID_MOBILE ="17631176046";
+    private static final String PASSWORD ="jinhua520";
+
     public static void list(CloseableHttpClient httpClient,Header[] cookies1 ) throws IOException {
         //创建HttpClient客户端
         HttpPost httpPost = new HttpPost(VPS_URL);
         httpPost.setHeader("Connection","keep-alive");
         // 设置请求参数
         List<NameValuePair> parameters = new ArrayList<>(0);
-        String cmd =	"vps_list";
-        parameters.add(new BasicNameValuePair("cmd", cmd));
+        parameters.add(new BasicNameValuePair("cmd", CMD_VPS_LIST));
         parameters.add(new BasicNameValuePair("vps_type", "free"));
         // 构造一个form表单式的实体
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(parameters);
@@ -53,16 +57,18 @@ public class XuFeiUtils {
         }
         HttpEntity entity = response.getEntity();
         String result = EntityUtils.toString(entity);
-        SFReuslt parse = JSON.parseObject(result, SFReuslt.class);
-        log.info("请求结果 {}",parse);
-
+        SFReuslt sf = JSON.parseObject(result, SFReuslt.class);
+        if(sf==null||!sf.ok()){
+            log.error("请求失败了");
+        }else {
+            log.info("请求结果 {}",UnicodeUtil.unicodeToString(sf.getMsg().toString()));
+        }
         response.close();
         httpClient.close();
     }
 
     public static void main(String[] args) throws IOException {
         login();
-
     }
 
     private static void login() throws IOException {
@@ -77,12 +83,10 @@ public class XuFeiUtils {
 
         // 设置2个post参数，一个是scope、一个是q
         List<NameValuePair> parameters = new ArrayList<NameValuePair>(0);
-        String cmd =	"login";
-        String id_mobile	="17631176046";
-        String password	="jinhua520";
-        parameters.add(new BasicNameValuePair("cmd", cmd));
-        parameters.add(new BasicNameValuePair("id_mobile", id_mobile));
-        parameters.add(new BasicNameValuePair("password", password));
+
+        parameters.add(new BasicNameValuePair("cmd", CMD_LOGIN));
+        parameters.add(new BasicNameValuePair("id_mobile", ID_MOBILE));
+        parameters.add(new BasicNameValuePair("password", PASSWORD));
         // 构造一个form表单式的实体
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(parameters);
         // 将请求实体设置到httpPost对象中
