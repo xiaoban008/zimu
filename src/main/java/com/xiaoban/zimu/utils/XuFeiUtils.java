@@ -26,6 +26,7 @@ import java.util.List;
 @Slf4j
 public class XuFeiUtils {
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:86.0) Gecko/20100101 Firefox/86.0";
+    private static final String UPD_FREE_URL = "https://api.sanfengyun.com/www/renew.php";
 
     private static  final String VPS_URL = "https://api.sanfengyun.com/www/vps.php";
     private static final int SUCCESS_CODE = 200;
@@ -43,6 +44,39 @@ public class XuFeiUtils {
         List<NameValuePair> parameters = new ArrayList<>(0);
         parameters.add(new BasicNameValuePair("cmd", CMD_VPS_LIST));
         parameters.add(new BasicNameValuePair("vps_type", "free"));
+        // 构造一个form表单式的实体
+        UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(parameters);
+        // 将请求实体设置到httpPost对象中
+        httpPost.setEntity(formEntity);
+        httpPost.setHeader("User-Agent",USER_AGENT);
+        httpPost.setHeaders(cookies1);
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        //相应结果
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode!=SUCCESS_CODE){
+            log.error("请求失败了");
+        }
+        HttpEntity entity = response.getEntity();
+        String result = EntityUtils.toString(entity);
+        SFReuslt sf = JSON.parseObject(result, SFReuslt.class);
+        if(sf==null||!sf.ok()){
+            log.error("请求失败了");
+        }else {
+            log.info("请求结果 {}",UnicodeUtil.unicodeToString(sf.getMsg().toString()));
+        }
+        response.close();
+        httpClient.close();
+    }
+
+
+    public static void upd(CloseableHttpClient httpClient,Header[] cookies1 ) throws IOException {
+        //创建HttpClient客户端
+        HttpPost httpPost = new HttpPost(VPS_URL);
+        httpPost.setHeader("Connection","keep-alive");
+        // 设置请求参数
+        List<NameValuePair> parameters = new ArrayList<>(0);
+        parameters.add(new BasicNameValuePair("cmd", "check_free_delay"));
+        parameters.add(new BasicNameValuePair("ptype", "vps"));
         // 构造一个form表单式的实体
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(parameters);
         // 将请求实体设置到httpPost对象中
@@ -111,6 +145,7 @@ public class XuFeiUtils {
         log.info("请求结果 {}",parse);
 
         list(httpClient,response.getHeaders("Cookie"));
+        upd(httpClient,response.getHeaders("Cookie"));
 
         response.close();
 
