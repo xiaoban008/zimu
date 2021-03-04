@@ -54,13 +54,13 @@ public class XuFeiUtils {
         //相应结果
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode!=SUCCESS_CODE){
-            log.error("请求失败了");
+            log.error("请求失败了{}",statusCode);
         }
         HttpEntity entity = response.getEntity();
         String result = EntityUtils.toString(entity);
         SFReuslt sf = JSON.parseObject(result, SFReuslt.class);
         if(sf==null||!sf.ok()){
-            log.error("请求失败了");
+            log.error("请求失败了{}",result);
         }else {
             log.info("请求结果 {}",UnicodeUtil.unicodeToString(sf.getMsg().toString()));
         }
@@ -93,7 +93,7 @@ public class XuFeiUtils {
         String result = EntityUtils.toString(entity);
         SFReuslt sf = JSON.parseObject(result, SFReuslt.class);
         if(sf==null||!sf.ok()){
-            log.error("请求失败了");
+            log.error("请求失败了 {}",result);
         }else {
             log.info("请求结果 {}",UnicodeUtil.unicodeToString(sf.getMsg().toString()));
         }
@@ -143,15 +143,10 @@ public class XuFeiUtils {
 //        result = UnicodeUtil.unicodeToString(result);
         SFReuslt parse = JSON.parseObject(result, SFReuslt.class);
         log.info("请求结果 {}",parse);
-
-        list(httpClient,response.getHeaders("Cookie"));
-        upd(httpClient,response.getHeaders("Cookie"));
-
+        Header[] cookies = response.getHeaders("Cookie");
+        list(httpClient,cookies);
+//        upd(httpClient,cookies);
         response.close();
-
-
-
-
         httpClient.close();
     }
 }
