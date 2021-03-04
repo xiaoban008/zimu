@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -125,17 +124,18 @@ public class SrtServiceImpl implements SrtService {
         String fileName = file.getOriginalFilename();
         String filePath = tmp+"/";
         File dest = new File(filePath + fileName);
-        dest.mkdirs();
+        if (!dest.exists()){
+            log.info("新建目录");
+            dest.mkdirs();
+        }
+        dest = new File(filePath + fileName);
         try {
             file.transferTo(dest);
-
             log.info("上传成功");
-//            standard(dest.getAbsolutePath());
             Boolean upload ;
-            String name = UUID.randomUUID().toString().substring(0,2) +"-" +  fileName;
-            file.transferTo(dest);
             upload = cosService.upload(dest);
             log.info("uoload is {}",upload);
+            dest.delete();
         } catch (IOException e) {
             log.error(e.toString(), e);
         }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-public class CosConfig {
+public class CosConfigProperty {
     @Value("${xiaoban.cos.secretId}")
    private String secretId;
     @Value("${xiaoban.cos.secretKey}")
@@ -20,4 +20,10 @@ public class CosConfig {
     private String region;
     @Value("${xiaoban.cos.bucket}")
     private String bucket;
+    private String baseUrl;
+
+    public String getBaseUrl() {
+        baseUrl = "https://"+bucket+".cos."+region+"+.myqcloud.com/";
+        return baseUrl;
+    }
 }

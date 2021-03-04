@@ -13,8 +13,18 @@ import java.io.InputStream;
  */
 public interface CosService {
     // 方法1  将本地文件上传到 COS
+    
     public Boolean upload( File file)
             throws CosClientException, CosServiceException;
+
+    /**
+     * 上传
+     * @param fileName
+     * @param fileBytes
+     * @return
+     */
+    Boolean  upload(String fileName, byte[] fileBytes);
+
     // 方法2  输入流上传到 COS
     public Boolean upload( InputStream input,String name)
             throws CosClientException, CosServiceException;

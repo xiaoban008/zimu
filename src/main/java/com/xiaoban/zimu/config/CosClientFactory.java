@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
  * @create 2021/03/04 - 11:12
  */
 @Component
-public class COSClientConfig {
-    private final CosConfig config;
+public class CosClientFactory {
+    private final CosConfigProperty config;
 
-    public COSClientConfig(CosConfig config) {
+    public CosClientFactory(CosConfigProperty config) {
         this.config = config;
     }
 
     @Bean
-    public COSClient getCOSClient(){
+    public COSClient getCosClient(){
         // 1 初始化用户身份信息（secretId, secretKey）。
         COSCredentials cred = new BasicCOSCredentials(config.getSecretId(), config.getSecretKey());
         // 2 设置 bucket 的区域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
